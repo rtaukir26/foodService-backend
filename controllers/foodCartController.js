@@ -6,7 +6,6 @@ const foodModel = require("../models/foodModel");
 exports.addToCart = async (req, res) => {
   try {
     const { quantity } = req.body;
-
     const userId = req.user._id; // Assuming you have user information in the request
 
     // Check if Id is a valid ObjectId
@@ -25,21 +24,12 @@ exports.addToCart = async (req, res) => {
         .json({ success: false, message: "food not found" });
 
     // Check if the food item already exists in the cart
-    let cartItem = await foodCartModel.findOne({
-      cart: req.params.id,
-      user: userId,
-    });
-
-    if (cartItem) {
-      cartItem.quantity = quantity;
-    } else {
-      cartItem = new foodCartModel({
-        cart: req.params.id,
-        quantity: quantity,
-        user: userId,
-      });
-    }
-    await cartItem.save();
+    let cartItem = await foodCartModel.findOneAndUpdate(
+      { user: userId, cart: req.params.id }, //to find based on these two id
+      { quantity: quantity }, //update the value
+      { upsert: true, new: true } //if found then update else add/create
+    );
+    // .populate("user").populate('cart');
 
     res.status(200).json({
       success: true,
@@ -50,6 +40,27 @@ exports.addToCart = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error in add food to cart",
+      error: error.message,
+    });
+  }
+};
+
+//get All cart - get
+exports.getAllCart = async (req, res) => {
+  try {
+    const userId = req.user._id; // Assuming you have user information in the request
+
+    let food = await foodCartModel.find({ user: userId }); //to get specific user's food
+
+    res.status(200).json({
+      success: true,
+      message: "Data has retrieved successfully",
+      food,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error in single cart",
       error: error.message,
     });
   }

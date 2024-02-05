@@ -6,10 +6,14 @@ const {
   addToCart,
   getSingleCart,
   deleteCart,
+  getAllCart,
 } = require("../controllers/foodCartController");
 const { isAuthenticated } = require("../middleware/auth");
 
-//Add food to cart
+//Get all cart food
+router.get("/all-cart", isAuthenticated, getAllCart);
+
+//Add/single/delete food from cart
 router
   .route("/add/:id")
   .post(isAuthenticated, addToCart)
