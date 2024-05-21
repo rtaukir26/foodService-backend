@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 //Routes
-app.use("/api/v1", authRoutes);
+app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/food", foodRoutes);
 app.use("/api/v1/cart", foodCartRoutes);
 
