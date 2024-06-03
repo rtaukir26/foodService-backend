@@ -27,6 +27,11 @@ app.use("/api/v1/food", foodRoutes);
 app.use("/api/v1/cart", foodCartRoutes);
 app.use("/api/v1/product", productRoutes);
 
+// Define your routes here
+app.get("/", (req, res) => {
+  res.status(200).json({ success: true,serverStatus:Running });
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`server is running on port ${process.env.PORT}`);
 });
