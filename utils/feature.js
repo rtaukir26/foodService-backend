@@ -13,7 +13,6 @@ exports.sendCookie = (user, statusCode, res, message) => {
     .json({
       success: true,
       message,
-      user,
-      token
+      user: { token, name: user.name, email: user.email },
     });
 };
