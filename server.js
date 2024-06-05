@@ -29,9 +29,11 @@ app.use("/api/v1/product", productRoutes);
 
 // Define your routes here
 app.get("/", (req, res) => {
-  res.status(200).json({ success: true,serverStatus:Running });
+  res.status(200).json({ success: true, serverStatus: "live" });
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`server is running on port ${process.env.PORT}`);
+app.listen(process.env.PORT || 4006, () => {
+  console.log(
+    `server is running on ${process.env.BASE_URL}${process.env.PORT}`
+  );
 });
